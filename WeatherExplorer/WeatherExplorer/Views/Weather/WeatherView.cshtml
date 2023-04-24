@@ -1,0 +1,56 @@
+﻿@using WeatherExplorer.BL
+@model IEnumerable<ViewWeather>
+
+@if (Model != null)
+{
+    <h1>Погода на @Model.FirstOrDefault()?.Date.ToString("MMMM yyyy")</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Время</th>
+                <th>Температура</th>
+                <th>Влажность</th>
+                <th>Облачно</th>
+                <th>Точка росы</th>
+                <th>Давление</th>
+                <th>Нижние облака</th>
+                <th>Горизонтальная видимость</th>
+                <th>Направление ветра</th>
+                <th>Скорость ветра</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var weather in Model)
+            {
+                <tr>
+                    <td>@weather.Date.ToString("dd.MM.yyyy")</td>
+                    <td>@weather.Time.ToString()</td>
+                    <td>@weather.Temprature</td>
+                    <td>@weather.Humidity</td>
+                    <td>@weather.Cloudy</td>
+                    <td>@weather.DewPoint</td>
+                    <td>@weather.Pressure</td>
+                    <td>@weather.LowerborderClouds</td>
+                    <td>@weather.HorizontalVisibility</td>
+                    <td>@weather.WindDirection</td>
+                    <td>@weather.WindSpeed</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h1>No data in database</h1>
+    <p>Enter data to find weather</p>
+    <form asp-controller="Weather" asp-action="GetWeather" enctype="text/plain" method="get">
+        <input type="text" name="pageNumber" multiple /> <p>Enter count entity for watching weather</p>
+        <br />
+        <input type="text" name="year" /> <p>Enter year</p>
+        <br />
+        <input type="text" name="month" /><p>Enter month</p>
+        <br />
+        <button type="submit">Find Weather by date</button>
+    </form>
+}

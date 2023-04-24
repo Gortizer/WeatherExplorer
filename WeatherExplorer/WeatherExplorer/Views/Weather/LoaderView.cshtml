@@ -1,0 +1,36 @@
+﻿@model IEnumerable<string>
+
+<h1>Buffered File Upload</h1>
+<hr />
+
+<form asp-controller="Weather" asp-action="UploadData" enctype="multipart/form-data" method="post">
+    <input type="file" name="files" multiple />
+    <br />
+    <input type="text" name="cityName" />
+    <br/>
+    <button type="submit">Загрузить файл</button>
+</form>
+@if (Model == null || Model.Count() < 1)
+{
+    <p>Введите название города</p>
+    <form asp-controller="Weather" asp-action="AddCity" method="post">
+        <input type="text" name="cityName" />
+        <br />
+        <button type="submit">добавить город</button>
+    </form>
+}
+else
+{
+    <p>Доступные города</p>
+    @foreach (var city in Model)
+    {
+        <p>@city</p>
+    }
+}
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert" style="margin-top:20px">
+        @ViewBag.Message
+    </div>
+}
