@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
+using WeatherExplorer.BL.Models;
 using WeatherExplorer.DAL;
 using WeatherExplorer.DAL.Models;
 
-namespace WeatherExplorer.BL
+namespace WeatherExplorer.BL.Services
 {
     public class WeatherViewer : IViewer
     {
@@ -19,8 +20,8 @@ namespace WeatherExplorer.BL
             var weather = _weatherRepository.GetWeather(year, month).ToList();
             if (weather == null || weather.Count() < 1)
                 return null;
-            
-            return await MapFromWeather(weather); 
+
+            return await MapFromWeather(weather);
         }
 
         public async Task<IEnumerable<string>> GetCities()
@@ -39,11 +40,13 @@ namespace WeatherExplorer.BL
         {
             var conditionIds = weathers.Select(w => w.WeatherConditionId).Distinct();
             var conditionsFromDb = new Dictionary<Guid, string>();
+
             foreach (var condition in conditionIds)
             {
                 var conditionFromDb = await _weatherRepository.GetWeatherConditionByIdAsync(condition);
                 conditionsFromDb.Add(conditionFromDb.Id, conditionFromDb.Name);
             }
+
             return conditionsFromDb;
         }
         private async Task<IEnumerable<ViewWeather>> MapFromWeather(IEnumerable<Weather> weathers)
@@ -73,10 +76,11 @@ namespace WeatherExplorer.BL
                 });
                 return weatherList;
             }
-            catch
+            catch (Exception ex)
             {
-                return null;
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
             }
+            return null;
         }
 
     }

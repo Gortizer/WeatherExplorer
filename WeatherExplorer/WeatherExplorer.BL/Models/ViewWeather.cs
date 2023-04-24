@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WeatherExplorer.DAL.Models;
 
-namespace WeatherExplorer.BL
+namespace WeatherExplorer.BL.Models
 {
     public class ViewWeather
     {

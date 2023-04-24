@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WeatherExplorer.BL;
+using WeatherExplorer.BL.Models;
 
 namespace WeatherExplorer.Controllers
 {
@@ -7,11 +8,13 @@ namespace WeatherExplorer.Controllers
     {
         private readonly IFileReader _fileReader;
         private readonly IViewer _viewer;
+        private readonly ILogger _logger;
 
-        public WeatherController(IFileReader fileReader, IViewer viewer)
+        public WeatherController(IFileReader fileReader, IViewer viewer, ILogger logger)
         {
             _fileReader = fileReader;
             _viewer = viewer;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -23,29 +26,31 @@ namespace WeatherExplorer.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetWeather(int pageNumber = 30, int? year = null, int? month = null)
-         {
+        {
+            var weatherData = new List<ViewWeather>();
             try
             {
                 if (year > 9999 || year < 1)
-
-                    return BadRequest(year);
+                    return BadRequest("Incorrect year");
 
                 if (month > 12 || month < 1)
-                    return BadRequest(month);
+                    return BadRequest("Incorrect month");
 
                 if (pageNumber < 1)
-                    return BadRequest(pageNumber);
+                    return BadRequest("Count entities less then 1");
 
-                var weatherData = await _viewer.GetWeather(year, month);
+                weatherData = _viewer.GetWeather(year, month).Result.ToList();
 
                 if (weatherData != null && pageNumber != 0)
-                    weatherData = weatherData.Take(pageNumber);
+                      weatherData.Take(pageNumber);
 
-                return View("WeatherView", weatherData);
             }
-            catch 
-            { }
-            return View("WeatherView");
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Failed load weather";
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
+            }
+            return View("WeatherView", weatherData);
 
         }
 
@@ -60,7 +65,6 @@ namespace WeatherExplorer.Controllers
                     {
                         ViewBag.Message = "File Upload Failed";
                         continue;
-
                     }
 
                     if (file.Length < 1)

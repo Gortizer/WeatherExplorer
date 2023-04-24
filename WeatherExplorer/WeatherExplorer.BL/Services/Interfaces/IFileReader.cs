@@ -1,4 +1,4 @@
-﻿namespace WeatherExplorer.BL
+﻿namespace WeatherExplorer.BL.Services.Interfaces
 {
     public interface IFileReader
     {

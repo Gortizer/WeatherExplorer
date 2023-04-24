@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WeatherExplorer.BL.Models;
 using WeatherExplorer.DAL.Models;
 
-namespace WeatherExplorer.BL
+namespace WeatherExplorer.BL.Services.Interfaces
 {
     public interface IViewer
     {

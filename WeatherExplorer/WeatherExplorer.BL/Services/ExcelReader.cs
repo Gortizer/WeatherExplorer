@@ -2,10 +2,11 @@
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using WeatherExplorer.BL.Models;
 using WeatherExplorer.DAL;
 using WeatherExplorer.DAL.Models;
 
-namespace WeatherExplorer.BL
+namespace WeatherExplorer.BL.Services
 {
     public class ExcelReader : IFileReader
     {
