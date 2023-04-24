@@ -5,15 +5,6 @@ namespace WeatherExplorer.DAL
 {
     public class WeatherExplorerContext : DbContext
     {
-        /*
-         * TODO:
-         * допилить конструктор, 
-         * инициализацию моделей, 
-         * прокинуть индексы на таблицы
-         * закинуть defaultValue для таблицы с направлением ветра, погодой
-         * 
-         * сделать IRepository
-         */
         public WeatherExplorerContext(DbContextOptions<WeatherExplorerContext> options) : base(options)
         {
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -29,10 +20,14 @@ namespace WeatherExplorer.DAL
                 .HasIndex(w => new { w.CityId, w.Date, w.Time })
                 .IsUnique();
 
-            modelBuilder.Entity<WeatherCondition>();
+            modelBuilder.Entity<WeatherCondition>()
+                .HasData(new WeatherCondition { Name = "штиль" });
+            modelBuilder.Entity<WeatherCondition>()
+                .HasIndex(wc => wc.Name)
+                .IsUnique();
         }
         public DbSet<City> Cities { get; set; }
-        public DbSet<Weather> Wheathers { get; set; }
+        public DbSet<Weather> Weathers { get; set; }
         public DbSet<WeatherCondition> WeatherConditions { get; set; }
 
     }
