@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WeatherExplorer.BL;
 using WeatherExplorer.BL.Models;
+using WeatherExplorer.BL.Services.Interfaces;
 
 namespace WeatherExplorer.Controllers
 {

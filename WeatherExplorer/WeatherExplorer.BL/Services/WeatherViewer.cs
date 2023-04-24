@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using WeatherExplorer.BL.Models;
+using WeatherExplorer.BL.Services.Interfaces;
 using WeatherExplorer.DAL;
 using WeatherExplorer.DAL.Models;
 

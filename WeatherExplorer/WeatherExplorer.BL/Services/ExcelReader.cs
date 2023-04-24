@@ -3,6 +3,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using WeatherExplorer.BL.Models;
+using WeatherExplorer.BL.Services.Interfaces;
 using WeatherExplorer.DAL;
 using WeatherExplorer.DAL.Models;
 
@@ -58,7 +59,6 @@ namespace WeatherExplorer.BL.Services
                 await InsertInDb(result, cityName);
             });
 
-
             _logger.LogInformation("Succesful reading file");
         }
 
@@ -75,6 +75,7 @@ namespace WeatherExplorer.BL.Services
 
             var listToInsert = new List<Weather>();
             var city = await _weatherRepository.GetCityByNameAsync(cityName);
+
             if (city == null)
             {
                 city = await _weatherRepository.AddCityByNameAsync(cityName);
@@ -83,6 +84,7 @@ namespace WeatherExplorer.BL.Services
             var conditionNames = weathers.Select(w => w.WeatherConditionString).Distinct().ToList();
 
             var conditionsFromDb = new List<WeatherCondition>();
+
             foreach (var condition in conditionNames)
             {
                 var conditionFromDb = await _weatherRepository.GetWeatherConditionByNameAsync(condition);
